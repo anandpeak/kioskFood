@@ -93,15 +93,35 @@ table.dataTableHeaderColor > thead > tr > th {
   color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
-.mainHeight{
+.mainHeight {
   height: 93vh;
 }
-.toastInfoContainer{
+.toastInfoContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 100px;
 }
-.toastTxt{
+.toastTxt {
   color: #9dc68d;
+}
+.loginContainer {
+  background-image: url(./imgs/bg1.png);
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.mt100 {
+  margin-top: 100px;
+}
+.nomch-login-blk {
+  margin: auto;
+  max-width: 355px;
+  min-width: 355px;
+  background: none;
+  border-width: 1px;
+  border-style: solid;
+  border: none;
+  padding: 40px;
+  border-radius: ;
 }
