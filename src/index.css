@@ -1,8 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: GothamProCryllic !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +8,100 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+  font-family: 'GothamProMediumCryllic';
+  src: url(../src/fonts/GothamProMediumCryllic.woff);
+}
+
+@font-face {
+  font-family: 'GothamProCryllic';
+  src: url(../src/fonts/GothamProMediumCryllic.woff);
+}
+
+.ui.menu .primaryColor.active.item,
+.ui.primaryColor.menu .active.item {
+  border-color: #5867dd !important;
+  color: #5867dd !important;
+  font-weight: 500 !important;
+}
+
+.ui.primaryColor.pointing.menu {
+  border-bottom: 2px solid rgba(88, 103, 221, 0.3) !important;
+}
+
+table.dataTableHeaderColor > thead > tr > th {
+  color: #1d5383;
+}
+
+.headerRectangle {
+  background-image: linear-gradient(to left, #fbac48, #ff4848);
+}
+
+.iconWhite {
+  color: white;
+  margin-right: 15px;
+}
+
+.headerIcon {
+  height: 72px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.mainImgContainer {
+  /* height: 89vh; */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mainImgStyle {
+  border-radius: 1000px;
+  height: 300px;
+  width: 300px;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imgTxt {
+  margin: 0px;
+}
+.imgTxtContainer {
+  margin-top: 30px;
+  text-align: center;
+}
+.containerDashboard {
+  height: 100vh;
+}
+.blue_text {
+  color: #0091ff;
+}
+.courseQuestionDropdown .dropdown {
+  display: none;
+}
+.imgExpandBtn {
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+.imgExpandBtn i {
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+.mainHeight{
+  height: 93vh;
+}
+.toastInfoContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+}
+.toastTxt{
+  color: #9dc68d;
 }
