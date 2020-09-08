@@ -244,6 +244,12 @@ class Dashboard extends React.Component {
                 <h4 className='toastTxt'>Сайхан хооллоорэй</h4>
                 <h4 className='toastTxt'>Have a nice meal</h4>
               </div>
+              <form style={{ display: 'none' }}>
+                <label>
+                  <input type='text' name='name' />
+                </label>
+                <input type='submit' value='Submit' />
+              </form>
             </div>
           </div>
         </div>
