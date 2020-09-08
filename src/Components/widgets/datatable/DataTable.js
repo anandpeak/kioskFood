@@ -1,8 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 
 import _ from 'lodash';
 import {ContextMenu, ContextMenuTrigger, MenuItem} from "react-contextmenu";
-import {Checkbox, Dropdown, Form, Portal, Radio, Segment, Input} from 'semantic-ui-react'
+import {Checkbox,Form, Portal, Radio, Segment, Input} from 'semantic-ui-react'
 import MathJax from 'react-mathjax-preview'
 import InlineEdit from '../inline_edit/InlineEdit'
 
@@ -10,9 +10,9 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import {translations} from '../../util/translations'
 
-import upArrow from './up_sort.png';
-import downArrow from './down_sort.png';
-import noArrow from './no_sort.png';
+// import upArrow from './up_sort.png';
+// import downArrow from './down_sort.png';
+// import noArrow from './no_sort.png';
 import {priceFormat, numberReverseFormat, hexToRgb} from "../../util/Util";
 import $ from 'jquery';
 

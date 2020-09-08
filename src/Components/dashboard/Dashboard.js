@@ -36,6 +36,11 @@ class Dashboard extends React.Component {
     this.state = {
       activeIndex: 0,
       isExpand: false,
+      token: '',
+      success: false,
+      items: [],
+      schoolId: null,
+      panes: [],
     };
 
     this.config = {
@@ -71,7 +76,50 @@ class Dashboard extends React.Component {
     ];
   }
 
-  renderFoodListMorning = () => {
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    const success = JSON.parse(localStorage.getItem('success'));
+    const items = JSON.parse(localStorage.getItem('items'));
+    const schoolId = localStorage.getItem('schoolId');
+
+    if (token && success && schoolId && items) {
+      fetch(`http://dev.nomch.mn/mobile/api/sale/items?school_id=1&code=BUS`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:3006/dashboard',
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          Authorization: 'Bearer ' + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.data) {
+            console.log('Data = ', data.data);
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
+      this.setState({ token, success, items, schoolId });
+    } else {
+      window.location = '/';
+    }
+
+    let panes = [];
+
+    if (items.length > 0) {
+      items.forEach((item) => {
+        console.log(item);
+        panes.push({ menuItem: item.name, render: this.renderFoodList });
+      });
+
+      this.setState({ panes });
+    }
+  }
+
+  renderFoodList = () => {
     return (
       <div>
         <DataTable
@@ -83,10 +131,6 @@ class Dashboard extends React.Component {
     );
   };
 
-  renderFoodList = () => {
-    return <div>asdfs</div>;
-  };
-
   _tabChange = (e, { activeIndex }) => {
     this.setState({ activeIndex });
   };
@@ -95,7 +139,11 @@ class Dashboard extends React.Component {
     if (data.value === 'print') {
       // this.props.removeQuestion(questionId);
     } else if (data.value === 'signOut') {
-      // this.props.orderQuestion();
+      this.setState({ token: '', success: false });
+      localStorage.setItem('token', '');
+      localStorage.setItem('success', false);
+
+      window.location = '/dashboard';
     } else if (data.value === 'chief') {
     }
   };
@@ -138,13 +186,7 @@ class Dashboard extends React.Component {
               style={{ margin: '20px' }}
               onTabChange={this._tabChange}
               activeIndex={this.state.activeIndex}
-              panes={[
-                {
-                  menuItem: 'Өглөөний цай',
-                  render: this.renderFoodListMorning,
-                },
-                { menuItem: 'Өдрийн хоол', render: this.renderFoodList },
-              ]}
+              panes={this.state.panes}
             />
           </div>
           <div
@@ -157,12 +199,12 @@ class Dashboard extends React.Component {
             <div className='imgExpandBtn'>
               {this.state.isExpand ? (
                 <i
-                  class='fa fa-compress fa-2x'
+                  className='fa fa-compress fa-2x'
                   onClick={() => this._expandBtn()}
                 ></i>
               ) : (
                 <i
-                  class='fa fa-expand fa-2x'
+                  className='fa fa-expand fa-2x'
                   onClick={() => this._expandBtn()}
                 ></i>
               )}
@@ -198,9 +240,9 @@ class Dashboard extends React.Component {
             </div>
             <div className='toastInfoContainer'>
               <img src={happyIcon} />
-              <div className="txtConatiner">
-                <h4 className="toastTxt">Сайхан хооллоорэй</h4>
-                <h4 className="toastTxt">Have a nice meal</h4>
+              <div className='txtConatiner'>
+                <h4 className='toastTxt'>Сайхан хооллоорэй</h4>
+                <h4 className='toastTxt'>Have a nice meal</h4>
               </div>
             </div>
           </div>

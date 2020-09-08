@@ -123,5 +123,5 @@ table.dataTableHeaderColor > thead > tr > th {
   border-style: solid;
   border: none;
   padding: 40px;
-  border-radius: ;
+  border-radius: 10px;
 }

@@ -7,16 +7,13 @@ import Dashboard from '../src/Components/dashboard/Dashboard';
 import Login from '../src/Components/login/Login';
 
 ReactDOM.render(
-  <React.StrictMode>
-    {/* <Switch> */}
+
     <BrowserRouter>
       <Switch>
-        <Route path='/' component={Login}></Route>
-        <Route path='/dashboard' component={Dashboard} exact></Route>
+          <Route path='/' component={Login} exact></Route>
+          <Route path='/dashboard' component={Dashboard}></Route>
       </Switch>
-    </BrowserRouter>
-    {/* </Switch> */}
-  </React.StrictMode>,
+    </BrowserRouter>,
   document.getElementById('root')
 );
 
