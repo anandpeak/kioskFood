@@ -37,6 +37,7 @@ class Dashboard extends React.Component {
       studentLastName: '',
       studentCode: '',
       confirmModal: false,
+      recordsToShow: [],
     };
 
     this.config = {
@@ -54,6 +55,7 @@ class Dashboard extends React.Component {
         align: 'center',
         width: 100,
         sortable: false,
+        staticFirstRow: false
       },
       {
         key: 'grade',
@@ -68,6 +70,7 @@ class Dashboard extends React.Component {
         width: 250,
         align: 'left',
         sortable: false,
+        colType: 'html',
       },
     ];
   }
@@ -121,6 +124,7 @@ class Dashboard extends React.Component {
           className='table table-bordered dataTableHeaderColor width-auto'
           columns={this.columns}
           config={this.config}
+          records={this.state.recordsToShow}
         />
       </div>
     );
@@ -293,7 +297,7 @@ class Dashboard extends React.Component {
     this.setState({ confirmModal: false });
   };
 
-  confirmRepeat = () => {
+  confirmRepeat = async () => {
     this.setState({ confirmModal: false, eatStatus: 'canEat' });
 
     const data = {
@@ -301,7 +305,9 @@ class Dashboard extends React.Component {
       nfcCode: this.state.studentBarCode,
     };
 
-    fetch('http://dev.nomch.mn/mobile/api/sale/food/usage_submit', {
+    let isSuccess = false;
+
+    await fetch('http://dev.nomch.mn/mobile/api/sale/food/usage_submit', {
       method: 'POST',
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -314,19 +320,63 @@ class Dashboard extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         console.log('BARD = ', data);
+        isSuccess = data.success;
       })
       .catch((error) => {
         console.error('Error:', error);
       });
+    console.log('isSuccess = ', isSuccess);
 
-    setTimeout(() => {
-      this.setState({
-        eatStatus: '',
-      });
-    }, 3000);
+    if (isSuccess) {
+      await fetch(
+        `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${this.state.schoolId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            Authorization: 'Bearer ' + this.state.token,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.data && data.data.sales) {
+            console.log('Data = ', data.data);
+            let tmpRecords = [];
+            data.data.sales.forEach((sale) => {
+              let saleObj = {};
+
+              if (sale.usedDate && sale.usedDate.date) {
+                saleObj.time = sale.usedDate.date.substring(11, 19);
+              }
+              if (sale.className) {
+                saleObj.grade = sale.className;
+              }
+              if (sale.studentCode && sale.firstName) {
+                saleObj.student = `<b>${sale.studentCode}</b> ${sale.firstName}`;
+              }
+              tmpRecords.push(saleObj);
+            });
+
+            this.setState({ recordsToShow: tmpRecords });
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
+      setTimeout(() => {
+        this.setState({
+          eatStatus: '',
+        });
+      }, 3000);
+    }
   };
 
   render() {
+    console.log('state = ', this.state);
     return (
       <div className='container-fluid containerDashboard'>
         <div className='row headerRectangle'>
