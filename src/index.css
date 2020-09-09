@@ -105,6 +105,9 @@ table.dataTableHeaderColor > thead > tr > th {
 .toastTxt {
   color: #9dc68d;
 }
+.toastTxtNoMeal {
+  color: #ff8888;
+}
 .loginContainer {
   background-image: url(./imgs/bg1.png);
   height: 100vh;
@@ -124,4 +127,11 @@ table.dataTableHeaderColor > thead > tr > th {
   border: none;
   padding: 40px;
   border-radius: 10px;
+}
+.modal {
+  height: auto;
+  top: auto;
+  left: auto;
+  bottom: auto;
+  right: auto;
 }

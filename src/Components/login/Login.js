@@ -65,6 +65,9 @@ class Login extends React.Component {
               localStorage.setItem('items', JSON.stringify(data.data.schools[0].items));
               window.location = '/dashboard';
               this.setState({ loader: false });
+            }else{
+              this.setState({ loader: false });
+
             }
           }
         });
