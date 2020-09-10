@@ -206,7 +206,7 @@ class Dashboard extends React.Component {
       win.document.write('<div style="margin-left:5%;">');
         win.document.write('<div class="dateLogo">'+'2020-9-10'+'</div>');
         win.document.write('<div class="dateLogo">'+'11:07'+'</div>');
-      win.document.write('</div>')
+      win.document.write('</div>');
     win.document.write('</div>');
     win.document.write('<div style="display:flex; width: 100%;">');
         win.document.write('<p style="width: 20%; padding: 0.5em 1em;">'+'1-1'+'</p>');
@@ -229,8 +229,8 @@ class Dashboard extends React.Component {
     win.document.write('<hr>');
     win.document.write('<hr>');
     win.document.write('<div>');
-        win.document.write('<p style="display:flex; justify-content: flex-end">'+'COPYRIGHT@NOMCH IT CONSULTING LLC'+'</p>');
-        win.document.write('<p style="display:flex; justify-content: flex-end">'+'77890122'+'</p>');
+        win.document.write('<p style="display:flex;font-size:10px; justify-content: center">'+'COPYRIGHT@NOMCH IT CONSULTING LLC'+'</p>');
+        win.document.write('<p style="display:flex;font-size:10px; justify-content: center">'+'77890122'+'</p>');
     win.document.write('</div>');
   
     win.document.write('</body></html>');
