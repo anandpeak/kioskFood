@@ -52,16 +52,15 @@ class Dashboard extends React.Component {
       {
         key: 'time',
         text: 'Цаг',
-        align: 'center',
+        align: 'left',
         width: 100,
         sortable: false,
-        staticFirstRow: false
       },
       {
         key: 'grade',
         text: 'Бүлэг',
         width: 100,
-        align: 'center',
+        align: 'left',
         sortable: false,
       },
       {
@@ -115,6 +114,53 @@ class Dashboard extends React.Component {
     } else {
       window.location = '/';
     }
+
+    if (schoolId && token) {
+      fetch(
+        `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${schoolId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            Authorization: 'Bearer ' + token,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.data && data.data.sales) {
+            console.log('Data = ', data.data);
+            let tmpRecords = [];
+            data.data.sales.forEach((sale) => {
+              let saleObj = {};
+
+              if (sale.usedDate && sale.usedDate.date) {
+                saleObj.time = sale.usedDate.date.substring(11, 16);
+              }
+              if (sale.className) {
+                saleObj.grade = sale.className;
+              }
+              if (sale.studentCode && sale.firstName) {
+                saleObj.student = `<b>${sale.studentCode}</b> ${sale.firstName}`;
+              }
+              tmpRecords.push(saleObj);
+            });
+
+            console.log('y = ', tmpRecords);
+
+            let x = tmpRecords.reverse();
+            console.log('x = ', x);
+
+            // console.log('tmpRecords = ', a);
+            this.setState({ recordsToShow: tmpRecords });
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
   }
 
   renderFoodList = () => {
@@ -125,6 +171,7 @@ class Dashboard extends React.Component {
           columns={this.columns}
           config={this.config}
           records={this.state.recordsToShow}
+          staticFirstRow={false}
         />
       </div>
     );
@@ -156,9 +203,9 @@ class Dashboard extends React.Component {
     }
   };
 
-  userHandleSubmit = async (event) => {
+  userHandleSubmit = async () => {
     if (this.state.studentBarCode !== '') {
-      fetch(
+      await fetch(
         `http://dev.nomch.mn/mobile/api/sale/food/usage?school_id=${this.state.schoolId}&nfcCode=${this.state.studentBarCode}`,
         {
           method: 'GET',
@@ -171,14 +218,9 @@ class Dashboard extends React.Component {
         }
       )
         .then((data) => data.json())
-        .then((res) => {
-          console.log('Res', res);
+        .then(async (res) => {
           if (res.data) {
-            if (
-              res.data.sale &&
-              res.data.sale.remain &&
-              res.data.sale.used_today_count
-            ) {
+            if (res.data.sale) {
               if (res.data.sale.remain > 0) {
                 // unuudur hool idsen eseh
                 if (res.data.sale.used_today_count > 0) {
@@ -229,7 +271,9 @@ class Dashboard extends React.Component {
                     nfcCode: this.state.studentBarCode,
                   };
 
-                  fetch(
+                  let isSuccess = false;
+
+                  await fetch(
                     'http://dev.nomch.mn/mobile/api/sale/food/usage_submit',
                     {
                       method: 'POST',
@@ -251,11 +295,55 @@ class Dashboard extends React.Component {
                       console.error('Error:', error);
                     });
 
-                  setTimeout(() => {
-                    this.setState({
-                      eatStatus: '',
-                    });
-                  }, 3000);
+                  if (isSuccess) {
+                    await fetch(
+                      `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${this.state.schoolId}`,
+                      {
+                        method: 'GET',
+                        headers: {
+                          'Access-Control-Allow-Origin': '*',
+                          'Content-Type':
+                            'application/x-www-form-urlencoded;charset=UTF-8;',
+                          'Access-Control-Allow-Headers': 'Content-Type',
+                          Authorization: 'Bearer ' + this.state.token,
+                        },
+                      }
+                    )
+                      .then((response) => response.json())
+                      .then((data) => {
+                        if (data.data && data.data.sales) {
+                          let tmpRecords = [];
+                          data.data.sales.forEach((sale) => {
+                            let saleObj = {};
+
+                            if (sale.usedDate && sale.usedDate.date) {
+                              saleObj.time = sale.usedDate.date.substring(
+                                11,
+                                16
+                              );
+                            }
+                            if (sale.className) {
+                              saleObj.grade = sale.className;
+                            }
+                            if (sale.studentCode && sale.firstName) {
+                              saleObj.student = `<b>${sale.studentCode}</b> ${sale.firstName}`;
+                            }
+                            tmpRecords.push(saleObj);
+                          });
+
+                          this.setState({ recordsToShow: tmpRecords });
+                        }
+                      })
+                      .catch((error) => {
+                        console.error('Error:', error);
+                      });
+
+                    setTimeout(() => {
+                      this.setState({
+                        eatStatus: '',
+                      });
+                    }, 3000);
+                  }
                 }
               } else {
                 this.setState({
@@ -278,6 +366,7 @@ class Dashboard extends React.Component {
                       ? res.data.student.last_name
                       : '',
                 });
+
                 setTimeout(() => {
                   this.setState({
                     eatStatus: '',
@@ -325,7 +414,6 @@ class Dashboard extends React.Component {
       .catch((error) => {
         console.error('Error:', error);
       });
-    console.log('isSuccess = ', isSuccess);
 
     if (isSuccess) {
       await fetch(
@@ -349,7 +437,7 @@ class Dashboard extends React.Component {
               let saleObj = {};
 
               if (sale.usedDate && sale.usedDate.date) {
-                saleObj.time = sale.usedDate.date.substring(11, 19);
+                saleObj.time = sale.usedDate.date.substring(11, 16);
               }
               if (sale.className) {
                 saleObj.grade = sale.className;
@@ -375,8 +463,15 @@ class Dashboard extends React.Component {
     }
   };
 
+  enterPress = (target) => {
+    if(target.charCode ===13){
+      this.userHandleSubmit();
+      console.log('asdfasdf');
+    }
+  };
+
   render() {
-    console.log('state = ', this.state);
+    document.addEventListener('keypress', this.enterPress);
     return (
       <div className='container-fluid containerDashboard'>
         <div className='row headerRectangle'>
