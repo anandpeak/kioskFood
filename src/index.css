@@ -47,7 +47,7 @@ table.dataTableHeaderColor > thead > tr > th {
 }
 
 .headerIcon {
-  height: 72px;
+  height: 7.43vh;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -96,7 +96,7 @@ table.dataTableHeaderColor > thead > tr > th {
   cursor: pointer;
 }
 .mainHeight {
-  height: 93vh;
+  height: 92.57vh;
 }
 .toastInfoContainer {
   display: flex;
@@ -150,8 +150,16 @@ table.dataTableHeaderColor > thead > tr > th {
   font-family: GothamProCryllic, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+.table-responsive {
+  height: 60vh;
+}
+
+.ui.pointing.secondary.primaryColor {
+  overflow: auto;
+}
+
 @media only screen and (max-width: 700px) {
-  .mainImgStyle{
+  .mainImgStyle {
     border-radius: 1000px;
     height: 150px;
     width: 150px;
@@ -161,3 +169,9 @@ table.dataTableHeaderColor > thead > tr > th {
     align-items: center;
   }
 }
+
+/* @media only screen and (min-height: 100vh) {
+  .mainHeight {
+    height: 120vh;
+  }
+} */

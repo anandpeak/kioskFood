@@ -41,11 +41,15 @@ class Dashboard extends React.Component {
     };
 
     this.config = {
-      show_all: false,
+      show_all: true,
       show_info: false,
       show_pagination: false,
       dynamic: true,
       excelFileName: 'Excel',
+      sort: {
+        column: 'time',
+        order: 'desc',
+      },
     };
 
     this.columns = [
@@ -131,9 +135,9 @@ class Dashboard extends React.Component {
         .then((response) => response.json())
         .then((data) => {
           if (data.data && data.data.sales) {
-            console.log('Data = ', data.data);
             let tmpRecords = [];
-            data.data.sales.forEach((sale) => {
+
+            data.data.sales.forEach((sale, index) => {
               let saleObj = {};
 
               if (sale.usedDate && sale.usedDate.date) {
@@ -147,13 +151,6 @@ class Dashboard extends React.Component {
               }
               tmpRecords.push(saleObj);
             });
-
-            console.log('y = ', tmpRecords);
-
-            let x = tmpRecords.reverse();
-            console.log('x = ', x);
-
-            // console.log('tmpRecords = ', a);
             this.setState({ recordsToShow: tmpRecords });
           }
         })
@@ -177,11 +174,76 @@ class Dashboard extends React.Component {
     );
   };
 
+  print = () => {
+    let style = '<style>';
+      style= style+'.schoolLogo {width:30%; height:20%}';
+      style=style+'.logoLine{display:flex}';
+      style=style+'.dateLogoContainer{margin-left:5%}';
+      style=style+'.rowContainer{display:flex; width: 100%;}';
+      style=style+'.row-class{width: 20%; padding: 0.5em 1em;}';
+      style=style+'.row-studentcode{width: 30%; padding: 0.5em 1em;}';
+      style=style+'.row-studentname{width: 40%; padding: 0.5em 1em; flex-wrap: wrap; word-wrap: break-word;}';
+      style=style+'.row-food{width:30%; padding: 0.5em 1em}';
+      style=style+'.row-foodNumber{width:20%; padding: 0.5em 1em}';
+      style=style+'.row-foodPrice{width:20%; padding: 0.5em 1em}';
+      style=style+'.row-foodTotal{width:30%; padding: 0.5em 1em}';
+      style=style+'.row-total{width:40%; padding: 0.5em 1em;font-weight: bold;}';
+      style=style+'.row-totalNumber{width:30%; padding: 0.5em 1em;font-weight: bold;}';
+      style=style+'.row-totalPrice{display:flex;justify-content: flex-end;font-weight: bold;padding: 0.5em 1em}';
+
+    style = '</style>';
+
+    var win = window.open('', '_blank');
+    win.document.write('<html><head>');
+    // win.document.write('<title>' + this.config.filename + '</title>');
+    win.document.write(style);
+    win.document.write('</head>');
+    win.document.write('<body>');
+    win.document.write('<div style="display:flex">');
+      win.document.write(
+        `<img style="width:30%; height:20%" src="https://m.zangia.mn/s/2006/1N-ADAMOY9-S4ADEWR-BM021UK-22.jpg"></img>`
+      );
+      win.document.write('<div style="margin-left:5%;">');
+        win.document.write('<div class="dateLogo">'+'2020-9-10'+'</div>');
+        win.document.write('<div class="dateLogo">'+'11:07'+'</div>');
+      win.document.write('</div>')
+    win.document.write('</div>');
+    win.document.write('<div style="display:flex; width: 100%;">');
+        win.document.write('<p style="width: 20%; padding: 0.5em 1em;">'+'1-1'+'</p>');
+        win.document.write('<p style="width: 30%; padding: 0.5em 1em;">'+'SM077003'+'</p>');
+        win.document.write('<p style="width: 40%; padding: 0.5em 1em; flex-wrap: wrap; word-wrap: break-word;">'+'baatarasdfaasdsdssdas'+'</p>');
+    win.document.write('</div>');
+    win.document.write('<hr>');
+    win.document.write('<div style="display:flex; width: 100%;">');
+      win.document.write('<p style="width:30%; padding: 0.5em 1em;">'+'Хоол'+'</p>');
+      win.document.write('<p style="width:20%; padding: 0.5em 1em;">'+'2'+'</p>');
+      win.document.write('<p style="width:20%; padding: 0.5em 1em;">'+'4000'+'</p>');
+      win.document.write('<p style="width:30%; padding: 0.5em 1em;">'+'8000'+'</p>');
+    win.document.write('</div>');
+    win.document.write('<hr>');
+    win.document.write('<div style="display:flex; width: 100%;">');
+      win.document.write('<p style="width:40%; padding: 0.5em 1em;font-weight: bold;">'+'Нийт дүн'+'</p>');
+      win.document.write('<p style="width:30%; padding: 0.5em 1em;font-weight: bold;">'+'2'+'</p>');
+      win.document.write('<p style="display:flex;justify-content: flex-end;font-weight: bold;padding: 0.5em 1em">'+'8000'+'</p>');
+    win.document.write('</div>');
+    win.document.write('<hr>');
+    win.document.write('<hr>');
+    win.document.write('<div>');
+        win.document.write('<p style="display:flex; justify-content: flex-end">'+'COPYRIGHT@NOMCH IT CONSULTING LLC'+'</p>');
+        win.document.write('<p style="display:flex; justify-content: flex-end">'+'77890122'+'</p>');
+    win.document.write('</div>');
+  
+    win.document.write('</body></html>');
+    win.print();
+    win.close();
+  };
+
   _tabChange = (e, { activeIndex }) => {
     this.setState({ activeIndex });
   };
 
   _expandBtn = () => {
+    this.print();
     this.setState({ isExpand: !this.state.isExpand });
   };
 
@@ -198,15 +260,18 @@ class Dashboard extends React.Component {
   };
 
   studentBarCodeChange = (event) => {
+    console.log('event = ', event);
     if (event) {
-      this.setState({ studentBarCode: event.target.value });
+      this.setState({ studentBarCode: this.state.studentBarCode + `${event}` });
     }
   };
 
   userHandleSubmit = async () => {
-    if (this.state.studentBarCode !== '') {
+    const { studentBarCode } = this.state;
+
+    if (studentBarCode !== '' && this.state.schoolId) {
       await fetch(
-        `http://dev.nomch.mn/mobile/api/sale/food/usage?school_id=${this.state.schoolId}&nfcCode=${this.state.studentBarCode}`,
+        `http://dev.nomch.mn/mobile/api/sale/food/usage?school_id=${this.state.schoolId}&nfcCode=${studentBarCode}`,
         {
           method: 'GET',
           headers: {
@@ -268,7 +333,7 @@ class Dashboard extends React.Component {
 
                   const data = {
                     school: this.state.schoolId,
-                    nfcCode: this.state.studentBarCode,
+                    nfcCode: studentBarCode,
                   };
 
                   let isSuccess = false;
@@ -289,7 +354,7 @@ class Dashboard extends React.Component {
                   )
                     .then((response) => response.json())
                     .then((data) => {
-                      console.log('BARD = ', data);
+                      console.log('BARD = ');
                     })
                     .catch((error) => {
                       console.error('Error:', error);
@@ -315,7 +380,6 @@ class Dashboard extends React.Component {
                           let tmpRecords = [];
                           data.data.sales.forEach((sale) => {
                             let saleObj = {};
-
                             if (sale.usedDate && sale.usedDate.date) {
                               saleObj.time = sale.usedDate.date.substring(
                                 11,
@@ -337,13 +401,17 @@ class Dashboard extends React.Component {
                       .catch((error) => {
                         console.error('Error:', error);
                       });
-
-                    setTimeout(() => {
-                      this.setState({
-                        eatStatus: '',
-                      });
-                    }, 3000);
                   }
+                  setTimeout(() => {
+                    this.setState({
+                      eatStatus: '',
+                      studentLastName: '',
+                      studentFirstName: '',
+                      studentCode: '',
+                      studentAvatar: '',
+                      studentBarCode: '',
+                    });
+                  }, 3000);
                 }
               } else {
                 this.setState({
@@ -370,10 +438,25 @@ class Dashboard extends React.Component {
                 setTimeout(() => {
                   this.setState({
                     eatStatus: '',
+                    studentLastName: '',
+                    studentFirstName: '',
+                    studentCode: '',
+                    studentAvatar: '',
+                    studentBarCode: '',
                   });
                 }, 3000);
               }
             }
+          } else {
+            console.log('BARCODE = ', this.state.studentBarCode);
+            this.setState({
+              eatStatus: '',
+              studentLastName: '',
+              studentFirstName: '',
+              studentCode: '',
+              studentAvatar: '',
+              studentBarCode: '',
+            });
           }
         })
         .catch((error) => {
@@ -384,11 +467,21 @@ class Dashboard extends React.Component {
 
   removeRepeat = () => {
     this.setState({ confirmModal: false });
+
+    setTimeout(() => {
+      this.setState({
+        eatStatus: '',
+        studentLastName: '',
+        studentFirstName: '',
+        studentCode: '',
+        studentAvatar: '',
+        studentBarCode: '',
+      });
+    }, 2000);
   };
 
   confirmRepeat = async () => {
     this.setState({ confirmModal: false, eatStatus: 'canEat' });
-
     const data = {
       school: this.state.schoolId,
       nfcCode: this.state.studentBarCode,
@@ -408,7 +501,7 @@ class Dashboard extends React.Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('BARD = ', data);
+        console.log('BARD1 = ', data);
         isSuccess = data.success;
       })
       .catch((error) => {
@@ -458,15 +551,24 @@ class Dashboard extends React.Component {
       setTimeout(() => {
         this.setState({
           eatStatus: '',
+          studentLastName: '',
+          studentFirstName: '',
+          studentCode: '',
+          studentAvatar: '',
+          studentBarCode: '',
         });
       }, 3000);
     }
   };
 
   enterPress = (target) => {
-    if(target.charCode ===13){
-      this.userHandleSubmit();
-      console.log('asdfasdf');
+    if (target.key) {
+      if (target.charCode === 13) {
+        this.userHandleSubmit();
+        console.log('asdfasdf');
+      } else {
+        this.studentBarCodeChange(target.key);
+      }
     }
   };
 
@@ -541,7 +643,7 @@ class Dashboard extends React.Component {
               activeIndex={this.state.activeIndex}
               panes={this.state.panes}
             />
-            <div>
+            <div style={{ display: 'none' }}>
               <label>
                 <input
                   type='text'
