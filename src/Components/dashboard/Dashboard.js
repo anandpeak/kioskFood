@@ -16,6 +16,10 @@ import DataTable from '../widgets/datatable/DataTable';
 // import { NDropdown as Dropdown } from '../widgets/Dropdown';
 import happyIcon from './happyIcon.png';
 import cryIcon from './cryIcon.png';
+import putCardIcon from './putCardIcon.png'
+import noCardIcon from './noCardIcon.png';
+import repeatedIcon from './repeatedIcon.png';
+import {priceFormat} from '../util/Util';
 //SM1801005 M01 M17 TS1906017 TS1906019
 class Dashboard extends React.Component {
   constructor(props) {
@@ -42,7 +46,8 @@ class Dashboard extends React.Component {
 
     this.config = {
       show_all: true,
-      show_info: false,
+      show_info: true,
+      show_footer:false,
       show_pagination: false,
       dynamic: true,
       excelFileName: 'Excel',
@@ -85,25 +90,6 @@ class Dashboard extends React.Component {
     const schoolId = localStorage.getItem('schoolId');
 
     if (token && success && schoolId && items) {
-      // fetch(`http://dev.nomch.mn/mobile/api/sale/items?school_id=1&code=BUS`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Access-Control-Allow-Origin': 'http://localhost:3006/dashboard',
-      //     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;',
-      //     'Access-Control-Allow-Headers': 'Content-Type',
-      //     Authorization: 'Bearer ' + token,
-      //   },
-      // })
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //     if (data.data) {
-      //       console.log('Data = ', data.data);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error('Error:', error);
-      //   });
-
       let panes = [];
 
       if (items.length > 0) {
@@ -190,48 +176,67 @@ class Dashboard extends React.Component {
       style=style+'.row-total{width:40%; padding: 0.5em 1em;font-weight: bold;}';
       style=style+'.row-totalNumber{width:30%; padding: 0.5em 1em;font-weight: bold;}';
       style=style+'.row-totalPrice{display:flex;justify-content: flex-end;font-weight: bold;padding: 0.5em 1em}';
-
     style = '</style>';
 
+    console.log('STat = ', this.state);
+
     var win = window.open('', '_blank');
+
     win.document.write('<html><head>');
     // win.document.write('<title>' + this.config.filename + '</title>');
     win.document.write(style);
     win.document.write('</head>');
-    win.document.write('<body>');
-    win.document.write('<div style="display:flex">');
+    win.document.write('<body style="margin:0px;">');
+    win.document.write('<div style="display:flex; margin:0px;">');
+      // win.document.write(
+      //   '<img id="posImg" alt="posIMg" style="width:30%; height:20%" src="https://m.zangia.mn/s/2006/1N-ADAMOY9-S4ADEWR-BM021UK-22.jpg"></img >'
+      // );
       win.document.write(
-        `<img style="width:30%; height:20%" src="https://m.zangia.mn/s/2006/1N-ADAMOY9-S4ADEWR-BM021UK-22.jpg"></img>`
+        '<img id="posImg" alt="posIMg" style="width:30%; height:20%" src="hfLogo.jpg"></img >'
       );
       win.document.write('<div style="margin-left:5%;">');
         win.document.write('<div class="dateLogo">'+'2020-9-10'+'</div>');
         win.document.write('<div class="dateLogo">'+'11:07'+'</div>');
       win.document.write('</div>');
     win.document.write('</div>');
-    win.document.write('<div style="display:flex; width: 100%;">');
-        win.document.write('<p style="width: 20%; padding: 0.5em 1em;">'+'1-1'+'</p>');
-        win.document.write('<p style="width: 30%; padding: 0.5em 1em;">'+'SM077003'+'</p>');
-        win.document.write('<p style="width: 40%; padding: 0.5em 1em; flex-wrap: wrap; word-wrap: break-word;">'+'baatarasdfaasdsdssdas'+'</p>');
+    win.document.write('<div style="display:flex; width: 100%; margin:0px;">');
+        win.document.write('<p style="width: 30%;margin:0px; ">'+'12-42'+'</p>');
+        win.document.write('<p style="width: 30%;margin:0px; ">'+this.state.studentCode+'</p>');
+        win.document.write('<p style="width: 40%;margin:0px; flex-wrap: wrap; word-wrap: break-word;">'+this.state.studentFirstName+'</p>');
     win.document.write('</div>');
-    win.document.write('<hr>');
-    win.document.write('<div style="display:flex; width: 100%;">');
-      win.document.write('<p style="width:30%; padding: 0.5em 1em;">'+'Хоол'+'</p>');
-      win.document.write('<p style="width:20%; padding: 0.5em 1em;">'+'2'+'</p>');
-      win.document.write('<p style="width:20%; padding: 0.5em 1em;">'+'4000'+'</p>');
-      win.document.write('<p style="width:30%; padding: 0.5em 1em;">'+'8000'+'</p>');
+    win.document.write('<hr style="margin:0px">');
+    win.document.write('<div style="margin:0px">');
+      win.document.write('<p style="width:40%;margin:0px;  display:inline-block; ">'+'Хоол'+'</p>');
+      win.document.write('<p style="width:20%;margin:0px;display:inline-block;">'+priceFormat(2)+'</p>');
+      win.document.write('<p style="width:20%;margin:0px; display:inline-block;">'+priceFormat(4000)+'</p>');
+      win.document.write('<p style="display:inline-block;margin:0px; position:absolute; right:1em">'+priceFormat(8000) +'</p>');
     win.document.write('</div>');
-    win.document.write('<hr>');
-    win.document.write('<div style="display:flex; width: 100%;">');
-      win.document.write('<p style="width:40%; padding: 0.5em 1em;font-weight: bold;">'+'Нийт дүн'+'</p>');
-      win.document.write('<p style="width:30%; padding: 0.5em 1em;font-weight: bold;">'+'2'+'</p>');
-      win.document.write('<p style="display:flex;justify-content: flex-end;font-weight: bold;padding: 0.5em 1em">'+'8000'+'</p>');
-    win.document.write('</div>');
-    win.document.write('<hr>');
-    win.document.write('<hr>');
     win.document.write('<div>');
-        win.document.write('<p style="display:flex;font-size:10px; justify-content: center">'+'COPYRIGHT@NOMCH IT CONSULTING LLC'+'</p>');
-        win.document.write('<p style="display:flex;font-size:10px; justify-content: center">'+'77890122'+'</p>');
+      win.document.write('<p style="width:40%;margin:0.3em 0em 0em 0em; display:inline-block; ">'+'Хоол'+'</p>');
+      win.document.write('<p style="width:20%;margin:0.3em 0em 0em 0em; display:inline-block;">'+priceFormat(2)+'</p>');
+      win.document.write('<p style="width:20%;margin:0.3em 0em 0em 0em;  display:inline-block;">'+priceFormat(4000)+'</p>');
+      win.document.write('<p style="margin:0.3em 0em 0em 0em; display:inline-block; position:absolute; right:1em">'+priceFormat(8000) +'</p>');
     win.document.write('</div>');
+    win.document.write('<hr style="margin:0px;">');
+    win.document.write('<div>');
+      win.document.write('<p style="width:40%; margin:0px; display:inline-block; font-weight: bold;">'+'Нийт дүн'+'</p>');
+      win.document.write('<p style="width:30%;margin:0px; display:inline-block; font-weight: bold; right:0">'+priceFormat(2)+'</p>');
+      win.document.write('<p style="display:inline-block;margin:0px; position:absolute; right:1em">'+priceFormat(8000)+'</p>');
+    win.document.write('</div>');
+    win.document.write('<hr style="margin:0px;">');
+    win.document.write('<hr style="margin:0px;">');
+    win.document.write('<div>');
+        win.document.write('<p style="display:flex;font-size:10px;margin:0px; justify-content: center">'+'COPYRIGHT@NOMCH IT CONSULTING LLC'+'</p>');
+        win.document.write('<p style="display:flex;font-size:10px;margin:0px; justify-content: center">'+'77890122'+'</p>');
+    win.document.write('</div>');
+    win.document.write('<script type="text/javascript">');
+    //  win.document.write('document.getElementById("posImg").src = "https://m.zangia.mn/s/2006/1N-ADAMOY9-S4ADEWR-BM021UK-22.jpg"');
+    win.document.write('document.getElementById("posImg").src = "./hfLogo.jpg"');
+    //  console.log('document.getElementById("posImg") = ',document.getElementById("posImg"));
+        // win.document('document.getElementById("posImg").src = ',document.getElementById("posImg"));
+    win.document.write('</script>')
+
+    win.document.write();
   
     win.document.write('</body></html>');
     win.print();
@@ -260,7 +265,6 @@ class Dashboard extends React.Component {
   };
 
   studentBarCodeChange = (event) => {
-    console.log('event = ', event);
     if (event) {
       this.setState({ studentBarCode: this.state.studentBarCode + `${event}` });
     }
@@ -354,13 +358,15 @@ class Dashboard extends React.Component {
                   )
                     .then((response) => response.json())
                     .then((data) => {
-                      console.log('BARD = ');
+                      isSuccess = data.success;
                     })
                     .catch((error) => {
                       console.error('Error:', error);
                     });
 
                   if (isSuccess) {
+                    this.print();
+
                     await fetch(
                       `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${this.state.schoolId}`,
                       {
@@ -450,13 +456,19 @@ class Dashboard extends React.Component {
           } else {
             console.log('BARCODE = ', this.state.studentBarCode);
             this.setState({
-              eatStatus: '',
+              eatStatus: 'noCard',
               studentLastName: '',
               studentFirstName: '',
               studentCode: '',
               studentAvatar: '',
               studentBarCode: '',
             });
+
+            setTimeout(() => {
+              this.setState({
+                eatStatus: '',
+              });
+            }, 3000);
           }
         })
         .catch((error) => {
@@ -467,6 +479,10 @@ class Dashboard extends React.Component {
 
   removeRepeat = () => {
     this.setState({ confirmModal: false });
+
+    this.setState({
+      eatStatus: 'repeated',
+    });
 
     setTimeout(() => {
       this.setState({
@@ -509,6 +525,8 @@ class Dashboard extends React.Component {
       });
 
     if (isSuccess) {
+      this.print();
+
       await fetch(
         `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${this.state.schoolId}`,
         {
@@ -524,7 +542,6 @@ class Dashboard extends React.Component {
         .then((response) => response.json())
         .then((data) => {
           if (data.data && data.data.sales) {
-            console.log('Data = ', data.data);
             let tmpRecords = [];
             data.data.sales.forEach((sale) => {
               let saleObj = {};
@@ -708,19 +725,43 @@ class Dashboard extends React.Component {
                 <>
                   <img src={happyIcon} />
                   <div className='txtConatiner'>
-                    <h4 className='toastTxt'>Сайхан хооллоорэй</h4>
-                    <h4 className='toastTxt'>Have a nice meal</h4>
+                    <h2 className='toastTxt'>Сайхан хооллоорэй!</h2>
+                    <h2 className='toastTxt'>Have a nice meal!</h2>
                   </div>
                 </>
               ) : this.state.eatStatus === 'noPrivilege' ? (
                 <>
                   <img src={cryIcon} />
                   <div className='txtConatiner'>
-                    <h5 className='toastTxtNoMeal'>Хоолны эрх байхгүй байна</h5>
-                    <h5 className='toastTxtNoMeal'>You've no meal pass</h5>
+                    <h3 className='toastTxtNoMeal'>Хоолны эрх байхгүй байна!</h3>
+                    <h3 className='toastTxtNoMeal'>You've no meal pass!</h3>
                   </div>
                 </>
-              ) : null}
+              ) : this.state.eatStatus === 'noCard' ?
+                  <div>
+                  <img height='300em' src={noCardIcon}></img>
+                  <div className='txtConatiner noCardTxtContainer'>
+                    <h2 className="noCardTxt">Картын мэдээлэл олдсонгүй!</h2>
+                    <h2 className="noCardTxt">Your card is invalid!</h2>
+                  </div>
+                </div>
+              : this.state.eatStatus === 'repeated' ?
+              <>
+                <img src={repeatedIcon} />
+                <div className='txtConatiner'>
+                  <h3 className='toastTxtNoMeal'>Өнөөдөр хоолондоо орсон байна!</h3>
+                  <h3 className='toastTxtNoMeal'>You've had your meal today!</h3>
+                </div>
+             </>
+              :
+              <div>
+                  <img height='300em' src={putCardIcon}></img>
+                  <div className='txtConatiner putYourCardTxtContainer'>
+                    <h2 className="putYourCardTxt">Картаа уншуулна уу!</h2>
+                    <h2 className="putYourCardTxt">Please put your card!</h2>
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>
