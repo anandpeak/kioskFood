@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
 
     this.config = {
       show_all: true,
-      show_info: true,
+      show_info: false,
       show_footer:false,
       show_pagination: false,
       dynamic: true,
@@ -55,6 +55,8 @@ class Dashboard extends React.Component {
         column: 'time',
         order: 'desc',
       },
+      showRowNumber:true,
+      add_button_left:true
     };
 
     this.columns = [
@@ -178,8 +180,6 @@ class Dashboard extends React.Component {
       style=style+'.row-totalPrice{display:flex;justify-content: flex-end;font-weight: bold;padding: 0.5em 1em}';
     style = '</style>';
 
-    console.log('STat = ', this.state);
-
     var win = window.open('', '_blank');
 
     win.document.write('<html><head>');
@@ -248,7 +248,6 @@ class Dashboard extends React.Component {
   };
 
   _expandBtn = () => {
-    this.print();
     this.setState({ isExpand: !this.state.isExpand });
   };
 
@@ -294,6 +293,7 @@ class Dashboard extends React.Component {
                 // unuudur hool idsen eseh
                 if (res.data.sale.used_today_count > 0) {
                   this.setState({
+                    eatStatus: 'repeated',
                     studentAvatar:
                       res.data.student && res.data.student.avatar
                         ? res.data.student.avatar
@@ -454,7 +454,6 @@ class Dashboard extends React.Component {
               }
             }
           } else {
-            console.log('BARCODE = ', this.state.studentBarCode);
             this.setState({
               eatStatus: 'noCard',
               studentLastName: '',
@@ -517,7 +516,6 @@ class Dashboard extends React.Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('BARD1 = ', data);
         isSuccess = data.success;
       })
       .catch((error) => {
@@ -582,7 +580,6 @@ class Dashboard extends React.Component {
     if (target.key) {
       if (target.charCode === 13) {
         this.userHandleSubmit();
-        console.log('asdfasdf');
       } else {
         this.studentBarCodeChange(target.key);
       }

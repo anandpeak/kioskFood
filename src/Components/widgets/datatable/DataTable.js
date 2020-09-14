@@ -260,6 +260,9 @@ class DataTable extends Component {
       filterRecords = this.filterData(filterRecords);
     }
 
+    let filteredRowsLen = filterRecords.length;
+
+
     nonFilterAllRecords = filterRecords;
 
     totalRecords = this.props.records.length;
@@ -316,7 +319,7 @@ class DataTable extends Component {
           className='row table-head asrt-table-head'
           id={this.props.id ? this.props.id + '-table-head' : ''}
         >
-          <div className='col-md-5'>
+          <div className={ 'col-md-5'} style={this.props.config.showRowNumber ? {display:'flex', alignItems:'center'}:null}>
             {this.props.config.add_button_left ? (
               this.props.config.text_or_button === 'button' ? (
                 <button
@@ -331,8 +334,13 @@ class DataTable extends Component {
                     {this.props.config.button_name}
                   </span>
                 </div>
-              ) : null
-            ) : null}
+              ) : this.props.config.showRowNumber ?
+              <span>
+              Нийт: {filteredRowsLen}
+            </span>
+            : null
+            ) :
+             null}
             {this.config.show_length_menu && !this.config.show_all ? (
               <div className='input-group asrt-page-length'>
                 <div className='input-group-addon input-group-prepend'>
@@ -1534,6 +1542,7 @@ DataTable.defaultProps = {
     show_all: false,
     show_footer: false,
     excel_path: null,
+    showRowNumber:false
   },
   language: {
     length_menu: '_MENU_',
