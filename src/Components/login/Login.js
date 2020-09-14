@@ -62,12 +62,14 @@ class Login extends React.Component {
           if (data.data) {
             if (data.data && data.data.schools.length > 0) {
               localStorage.setItem('schoolId', data.data.schools[0].schoolId);
-              localStorage.setItem('items', JSON.stringify(data.data.schools[0].items));
+              localStorage.setItem(
+                'items',
+                JSON.stringify(data.data.schools[0].items)
+              );
               window.location = '/dashboard';
               this.setState({ loader: false });
-            }else{
+            } else {
               this.setState({ loader: false });
-
             }
           }
         });
@@ -81,7 +83,17 @@ class Login extends React.Component {
         <div className='row'>
           <div className='col-md-6'>
             <div className='mt100 text-center'>
-              <img src={nomchLogo} height='70px' />
+              <img
+                src={nomchLogo}
+                style={{ marginBottom: '15px' }}
+                height='70px'
+              />
+              <h3 className='welcomeTxt'>Please welcome </h3>
+              <h3 className='welcomeTxt'>to Nomch!</h3>
+              <div className="welcomeDtlTxt">
+                <p>The main platform for school, teachers and parents</p>
+                <p>sharing data about their children</p>
+              </div>
             </div>
           </div>
           <div className='col-md-6'>
@@ -96,28 +108,38 @@ class Login extends React.Component {
                         textTransform: 'uppercase',
                         color: 'white',
                         marginBottom: '20px',
+                        fontFamily: 'GothamProCryllic',
+                        fontWeight: 'bold',
                       }}
                     >
                       Login
                     </h3>
                   </div>
-                  <div>
-                    <label>Mobile number</label>
+                  <div className='loginTxtContainer'>
+                    <label className='loginTxt'>Mobile number</label>
                     <input
                       onChange={this._handleInputChange}
                       name='phoneNumber'
+                      className='form-control'
+                      placeholder='Mobile number'
                       type='text'
                     ></input>
                   </div>
-                  <div>
-                    <label>Password</label>
+                  <div className='loginTxtContainer'>
+                    <label className='loginTxt'>Password</label>
                     <input
                       onChange={this._handleInputChange}
                       name='password'
-                      type='text'
+                      type='password'
+                      className='form-control'
+                      placeholder='Password'
                     ></input>
                   </div>
-                  <button onClick={this.submitLogin} type='submit'>
+                  <button
+                    onClick={this.submitLogin}
+                    className='btn btn-primary'
+                    type='submit'
+                  >
                     Login
                   </button>
                 </div>

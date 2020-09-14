@@ -181,6 +181,32 @@ table.dataTableHeaderColor > thead > tr > th {
   font-weight: bold;
 }
 
+.loginTxt{
+  font-weight: normal;
+  color: white;
+}
+
+.loginTxtContainer{
+  margin-bottom: 15px;
+}
+
+.welcomeDtlTxt{
+  margin-top: 30px;
+}
+
+.welcomeDtlTxt p{
+  color: white;
+  font-size: 14px;
+  margin:0px;
+}
+
+.welcomeTxt{
+  font-size: 30px;
+  margin:0px;
+  color: white;
+  font-family: GothamProMediumCryllic;
+}
+
 @media only screen and (max-width: 700px) {
   .mainImgStyle {
     border-radius: 1000px;
