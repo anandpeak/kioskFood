@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
       items: [],
       schoolId: null,
       panes: [],
-      isToggled: false,
+      isToggled: true,
       studentBarCode: '3984008027',
       eatStatus: '',
       studentAvatar: '',
@@ -95,9 +95,11 @@ class Dashboard extends React.Component {
       let panes = [];
 
       if (items.length > 0) {
-        items.forEach((item) => {
-          panes.push({ menuItem: item.name, render: this.renderFoodList });
-        });
+        // items.forEach((item) => {
+        //   panes.push({ menuItem: item.name, render: this.renderFoodList });
+        // });
+        
+        panes.push({menuItem: items[0].name, render: this.renderFoodList})
 
         this.setState({ panes });
       }
@@ -365,7 +367,9 @@ class Dashboard extends React.Component {
                     });
 
                   if (isSuccess) {
-                    this.print();
+                    if(this.state.isToggled){
+                      this.print();
+                    }
 
                     await fetch(
                       `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${this.state.schoolId}`,
@@ -523,7 +527,9 @@ class Dashboard extends React.Component {
       });
 
     if (isSuccess) {
-      this.print();
+      if(this.state.isToggled){
+        this.print();
+      }
 
       await fetch(
         `http://dev.nomch.mn/mobile/api/v2/kiosk/report?school=${this.state.schoolId}`,
